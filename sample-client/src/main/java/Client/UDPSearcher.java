@@ -38,6 +38,7 @@ public class UDPSearcher {
         }
         List<ServerInfo> devices = listener.getServerAndClose();
         if (devices.size() > 0) {
+            // 只与第一个返回信息的服务器进行连接
             return devices.get(0);
         }
         return null;
@@ -55,7 +56,7 @@ public class UDPSearcher {
     private static void sendBroadcast() throws IOException {
         System.out.println("UDPSearcher sendBroadcast started.");
 
-        // 作为搜索方，让系统自动分配端口
+        // 构建 UDP socket，此时随机分配端口，后面再设置
         DatagramSocket ds = new DatagramSocket();
 
         // 构建一份请求数据
@@ -143,7 +144,7 @@ public class UDPSearcher {
                     String sn = new String(buffer, minLen, dataLen - minLen);
                     ServerInfo info = new ServerInfo(serverPort, ip, sn);
                     serverInfoList.add(info);
-                    // 成功接收到一份
+                    // 成功接收到一份就提醒，后序可能会收到多份
                     receiveDownLatch.countDown();
                 }
             } catch (Exception ignored) {

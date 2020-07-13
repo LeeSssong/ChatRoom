@@ -13,10 +13,10 @@ import java.net.SocketTimeoutException;
 public class TCPClient {
     public static void linkWith(ServerInfo info) throws IOException {
         Socket socket = new Socket();
-        // 超时时间
+        // 超时时间（读取时间）
         socket.setSoTimeout(3000);
 
-        // 连接本地，端口2000；超时时间3000ms
+        // 连接服务器
         socket.connect(new InetSocketAddress(Inet4Address.getByName(info.getAddress()), info.getPort()), 3000);
 
         System.out.println("已发起服务器连接，并进入后续流程～");
@@ -24,7 +24,10 @@ public class TCPClient {
         System.out.println("服务器信息：" + socket.getInetAddress() + " P:" + socket.getPort());
 
         try {
+            // 创建读取类
             ReadHandler readHandler = new ReadHandler(socket.getInputStream());
+
+            // 通过输入流，监听服务器回送的消息
             readHandler.start();
 
             // 发送接收数据
