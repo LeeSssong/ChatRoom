@@ -1,4 +1,4 @@
-package library.clink.utils;
+package src.main.java.library.clink.utils;
 
 import java.io.Closeable;
 import java.io.IOException;

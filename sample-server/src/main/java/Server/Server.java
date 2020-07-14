@@ -3,6 +3,8 @@ package Server;
 
 
 import Foo.constants.TCPConstants;
+import src.main.java.library.clink.core.IoContext;
+import src.main.java.library.clink.impl.IoSelectorProvider;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +12,12 @@ import java.io.InputStreamReader;
 
 public class Server {
     public static void main(String[] args) throws IOException {
+
+        // 初始化上下文
+        IoContext.setup()
+                .ioProvider((new IoSelectorProvider()))
+                .start();
+
         TCPServer tcpServer = new TCPServer(TCPConstants.PORT_SERVER);
         boolean isSucceed = tcpServer.start();
         if (!isSucceed) {
@@ -28,5 +36,6 @@ public class Server {
 
         UDPProvider.stop();
         tcpServer.stop();
+        IoContext.close();
     }
 }
