@@ -34,7 +34,6 @@ public class TCPServer implements ClientHandler.ClientHandlerCallback{
         try {
             // 启动一个事件选择器
             selector = Selector.open();
-            ServerSocketChannel server = ServerSocketChannel.open();
             // 启动通道
             server = ServerSocketChannel.open();
             // 设置为非阻塞
@@ -43,6 +42,7 @@ public class TCPServer implements ClientHandler.ClientHandlerCallback{
             server.socket().bind(new InetSocketAddress(port));
 
             // 注册客户端连接到达监听
+            // 将客户端到达事件与 channel 绑定，并注册到 selector
             server.register(selector, SelectionKey.OP_ACCEPT);
 
             this.server = server;
